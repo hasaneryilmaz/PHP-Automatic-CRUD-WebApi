@@ -5,6 +5,8 @@ PHP Automatic Crud Operations
 PHP-Automatic-CRUD is a PHP library that provides automatic CRUD operations for your database.
 
 ## Installation
+- Realede version : [Download](https://github.com/hasaneryilmaz/PHP-Automatic-CRUD/releases "Download")
+- Composer install : composer create-project hascoding/webapi myapp
 - Put the api folder in your system directory.
 - Make your database settings in api/DbConnect.php file.
 - Everything is ready.
