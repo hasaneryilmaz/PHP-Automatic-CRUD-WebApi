@@ -1,0 +1,23 @@
+{
+    "name": "hascoding/webapi",
+    "description": "PHP Automatic Crud Operations,	
+    "license": "GPL-3.0-or-later",
+	"type": "project",
+	"minimum-stability": "dev",
+	"prefer-stable": true ,
+    "homepage" : "https://hasaneryilmaz.net",
+    "authors": [
+        {
+            "name": "HASAN ERYILMAZ",
+            "email": "hasaneryilmaz0@gmail.com"
+        }
+    ],
+    "require": {
+		"php": ">=7.4"
+	},
+    "require-dev": {
+        "php": ">=7.4"
+    }
+	
+	
+}
