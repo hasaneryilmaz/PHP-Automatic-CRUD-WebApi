@@ -1,6 +1,6 @@
 {
     "name": "hascoding/webapi",
-    "description": "PHP Automatic Crud Operations,	
+    "description": "PHP Automatic Crud Operations",	
     "license": "GPL-3.0-or-later",
 	"type": "project",
 	"minimum-stability": "dev",
