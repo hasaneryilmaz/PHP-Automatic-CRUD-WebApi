@@ -54,7 +54,7 @@ foreach($tablolar as $tablo)
         }else
         {
             http("BAD_REQUEST");
-            return ["error"=>"There are no records in this table","succeed"=>false];
+            return ["error"=>"There are no records in this table","success"=>false];
         }
 
     };
@@ -76,7 +76,7 @@ foreach($tablolar as $tablo)
         }else
         {
             http("NOT_FOUND");
-            return ["error"=>"There is no such record","succeed"=>false];
+            return ["error"=>"There is no such record","success"=>false];
         }
     };
 
@@ -92,11 +92,11 @@ foreach($tablolar as $tablo)
         if($sorgu->rowCount() > 0 )
         {
             http("OK");
-            return ["succeed"=>true,"message"=>"Deletion successful"];
+            return ["success"=>true,"message"=>"Deletion successful"];
         }else
         {
             http("NOT_FOUND");
-            return ["error"=>"You tried to delete a record that does not exist","succeed"=>false];
+            return ["error"=>"You tried to delete a record that does not exist","success"=>false];
         }
     };
 
@@ -106,7 +106,7 @@ foreach($tablolar as $tablo)
         $sorgu = $baglan->prepare($sql);
         $sorgu->execute();
         http("OK");
-        return ["succeed"=>true,"message"=>"All records in the table have been deleted successfully."];
+        return ["success"=>true,"message"=>"All records in the table have been deleted successfully."];
     };
 
     ${$tablo}["Insert"] = function($param) use ($baglan,$tablo){
@@ -124,11 +124,11 @@ foreach($tablolar as $tablo)
         if($sorgu->rowCount() > 0 )
         {
             http("ADD_OK");
-            return ["succeed"=>true,"message"=>"Adding successful"];
+            return ["success"=>true,"message"=>"Adding successful"];
         }else
         {
             http("NOT_FOUND");
-            return ["error"=>"A problem occurred while adding","succeed"=>false];
+            return ["error"=>"A problem occurred while adding","success"=>false];
         }
 
     };
@@ -153,61 +153,86 @@ foreach($tablolar as $tablo)
         if($sorgu->rowCount() > 0 )
         {
             http("OK");
-            return ["succeed"=>true,"message"=>"Update process successful"];
+            return ["success"=>true,"message"=>"Update process successful"];
         }else
         {
             http("NOT_FOUND");
-            return ["error"=>"There was a problem during the update","succeed"=>false];
+            return ["error"=>"There was a problem during the update","success"=>false];
         }
 
     };
 
 };
+    if(@$_GET["auth_token"])
+    {
+        $hascoding_controller = $hascoding_api_auth["GetBy"]("auth_token/".$_GET["auth_token"]);
+        if($hascoding_controller["success"]==1)
+        {
 
-    foreach ($tablolar as $tablo) {
-        switch ($tur) {
-            case $tablo:
+            $auto_token= $hascoding_controller["data"][0];
+            $last_date = $auto_token["last_date"];
+            $now_date = date("Y-m-d H:i:s");
+            if($last_date<$now_date)
+            {
+                echo "You tried to access it with an expired token <br>";
+                $goster = 0;
+            }
+            else {
+                $goster =1;
+                foreach ($tablolar as $tablo) {
+                    switch ($tur) {
+                        case $tablo:
 
-                $httprequest = $_SERVER['REQUEST_METHOD'];
-                switch ($httprequest)
-                {
+                            $httprequest = $_SERVER['REQUEST_METHOD'];
+                            switch ($httprequest) {
 
-                    case "GET":
-                        if($param != "/")
-                        {
-                            jsoncikti(${$tablo}["GetBy"]($param));
-                        }else
-                        {
-                            jsoncikti(${$tablo}["Get"]());
-                        }
-                    break;
+                                case "GET":
+                                    if ($param != "/") {
+                                        jsoncikti(${$tablo}["GetBy"]($param));
+                                    } else {
+                                        jsoncikti(${$tablo}["Get"]());
+                                    }
+                                    break;
 
-                    case "DELETE":
-                        $p = explode("/",$param);
-                        if($p[0] == "delete")
-                        {
-                            jsoncikti(${$tablo}["DeleteAll"]());
-                        }else
-                        {
-                            jsoncikti(${$tablo}["Delete"]($param));
-                        }
-                    break;
+                                case "DELETE":
+                                    $p = explode("/", $param);
+                                    if ($p[0] == "delete") {
+                                        jsoncikti(${$tablo}["DeleteAll"]());
+                                    } else {
+                                        jsoncikti(${$tablo}["Delete"]($param));
+                                    }
+                                    break;
 
-                    case "POST":
-                        jsoncikti(${$tablo}["Insert"]($param));
-                    break;
+                                case "POST":
+                                    jsoncikti(${$tablo}["Insert"]($param));
+                                    break;
 
-                    case "PUT":
-                        jsoncikti(${$tablo}["Update"]($param));
-                    break;
+                                case "PUT":
+                                    jsoncikti(${$tablo}["Update"]($param));
+                                    break;
 
+                            }
+                            break;
+                    }
                 }
-            break;
+            }
+            if($goster == 1)
+            {
+                if($tur == ""){
+                    echo "Please choose a table for the api";
+                }
+            }
+
+        }else
+        {
+            echo "No such access token";
         }
+    }else
+    {
+        echo "You must specify an Access Token";
     }
 
-    if($tur == ""){
-        echo "Please choose a table for the api";
-    }
 
+
+?>
 
