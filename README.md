@@ -10,6 +10,7 @@ PHP-Automatic-CRUD is a PHP library that provides automatic CRUD operations for 
 
 - Put the api folder in your system directory.
 - Make your database settings in api/DbConnect.php file.
+- 
 - Everything is ready.
 
 ## How to use ?
