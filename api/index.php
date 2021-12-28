@@ -42,15 +42,27 @@ function jsoncikti($p){
 
 foreach($tablolar as $tablo)
 {
-    ${$tablo}["Get"] = function() use ($baglan,$tablo)
+    ${$tablo}["Get"] = function($page) use ($baglan,$tablo,$perpageitem)
     {
-        $sql = "SELECT * FROM ". $tablo;
-        $sorgu = $baglan->prepare($sql);
+        $toplamVeri = $baglan->query("SELECT COUNT(*) FROM ".$tablo)->fetchColumn();
+        $toplamSayfa = ceil($toplamVeri / $perpageitem);
+
+        if($page < 1) $page = 1;
+        if($page > $toplamSayfa){
+            $page = (int)$toplamSayfa;
+        }
+        $limit = ($page - 1) * $perpageitem;
+        $sql = "SELECT * FROM ".$tablo." LIMIT ".$limit.",".$perpageitem;
+        $sorgu = $baglan->query($sql);
         $sorgu->execute();
+
+        //$sql = "SELECT * FROM ". $tablo;
+        //$sorgu = $baglan->prepare($sql);
+        //$sorgu->execute();
         if($sorgu->rowCount() >0 )
         {
             http("OK");
-            return ["success" => true, "data" => $sorgu->fetchAll(PDO::FETCH_ASSOC) ];
+            return ["success" => true, "this_page" => $page , "total_page" => $toplamSayfa , "data" => $sorgu->fetchAll(PDO::FETCH_ASSOC) ];
         }else
         {
             http("BAD_REQUEST");
@@ -165,6 +177,7 @@ foreach($tablolar as $tablo)
 };
     if(@$_GET["auth_token"])
     {
+        $page = @$_GET["page"] ? @$_GET["page"] : 1;
         $hascoding_controller = $hascoding_api_auth["GetBy"]("auth_token/".$_GET["auth_token"]);
         if($hascoding_controller["success"]==1)
         {
@@ -190,7 +203,7 @@ foreach($tablolar as $tablo)
                                     if ($param != "/") {
                                         jsoncikti(${$tablo}["GetBy"]($param));
                                     } else {
-                                        jsoncikti(${$tablo}["Get"]());
+                                        jsoncikti(${$tablo}["Get"]($page));
                                     }
                                     break;
 
