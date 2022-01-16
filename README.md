@@ -32,7 +32,7 @@ PHP-Automatic-CRUD is a PHP library that provides automatic CRUD operations for 
 - GET: Get all records from {table_name}
 > https://{sitename}/api/{table_name}?auth_key={auth_token}&page={page}
 - GET: Get a record from {table_name} by id
-> https://{sitename}/api/{table_name}/{table_column_name}/{id}?auth_key={auth_token}
+> https://{sitename}/api/{table_name}/{table_column_name}/{id}?auth_key={auth_token}&page={page}
 - POST: Create a new record in {table_name}
 > https://{sitename}/api/{table_name}?auth_key={auth_token}
 - PUT: Update a record in {table_name} by id
