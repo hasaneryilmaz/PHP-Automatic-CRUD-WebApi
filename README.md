@@ -1,4 +1,4 @@
-# PHP-Automatic-CRUD
+# PHP-Automatic-CRUD Web Api
 PHP Automatic Crud Operations Web API 
 
 ## What is PHP-Automatic-CRUD ?
